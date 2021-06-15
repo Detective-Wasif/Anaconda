@@ -1,4 +1,4 @@
-s='`Hello``World`+1.45-5`Anacon\`da`[`getch`[`a`|`b`]|`else`]{0{1{2}}}'
+s='`Hello``World`+1.45-5`Anacon\`da`[`getch`[`a`|`b`01wasif]|`else`]wasif{0{1{2}}}'
 
 class Token:
   def __init__(self,Type):
@@ -9,7 +9,6 @@ def lexer(s):
   lex=[]
   s=s.replace('\`','ƙ')
   idx=0
-  print(s)
   while idx<len(s):
     if s[idx].isdigit():
       cap=''
@@ -48,7 +47,6 @@ def lexer(s):
      branch=pair.rfind('|')
      pair=[Token('if')]+[*map(lexer,[pair[:branch],pair[branch+1:]])]
      lex.append(pair)
-     idx+=1
      continue
     if s[idx]=='{':
      cap=''
