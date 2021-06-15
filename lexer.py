@@ -1,4 +1,4 @@
-s='`Hello``World`+1.45-5`Anacon\`da`[`getch`[`a`|`b`01wasif]|`else`]wasif{0{1{2}}}'
+s='`Hello``World`+1.45-5`Anacon\`da`[`getch`[`a`|`b`01wasif]|`else`]wasif{0{1{2}}}99(loop`oi`)'
 
 class Token:
   def __init__(self,Type):
@@ -64,8 +64,25 @@ def lexer(s):
      lex.append(catch)
      idx+=1     
      continue
+    if s[idx]=='(':
+     cap=''
+     idx+=1
+     cup=1
+     while cup:
+       if s[idx]=='(':
+         cup+=1
+       if s[idx]==')':
+         cup-=1
+       cap+=s[idx]
+       idx+=1
+     block=cap[:-1] 
+     catch=[Token('for')]+[lexer(block)]
+     lex.append(catch)
+     idx+=1     
+     continue
     lex.append(Token(s[idx]))
     idx+=1
+
  
   return lex
 
