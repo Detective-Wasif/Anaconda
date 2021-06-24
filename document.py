@@ -12,5 +12,8 @@ class Document:
     self.props=['x','y','pos','wfill','hfill','corner','fill','dir']
   def pulse(self):
     return {attr:getattr(self,attr) for attr in self.props}
+  def __str__(self):
+    return "\n".join("".join(line) for line in self.board)
 doc=Document()
 print(doc.pulse())
+print(str(doc))
