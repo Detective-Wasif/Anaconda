@@ -19,3 +19,10 @@ def product(array):
 
 def transpose(array,filler=0):
   return list(map(list,itertools.zip_longest(array,fillvalue=filler)))
+
+def integer_partitions(number,I=1):
+    partitions=[[number]]
+    for i in range(I,number//2+1):
+      for p in integer_partitions(number-i,i):
+        partitions.append([i]+p)
+    return partitions
