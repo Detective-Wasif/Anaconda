@@ -11,10 +11,10 @@ import itertools
 import collections
 import hashlib
 import operator
-import turtle
+#import turtle
 import numpy as np
 import sympy
-from lexer import *
+#from lexer import *
 from datetime import date
 from datetime import datetime as dt
 class Stack:
@@ -41,10 +41,10 @@ class Stack:
   def swap(self):
     self.stack[-2],self.stack[-1]=self.stack[-1],self.stack[-2]
   def rotl(self,units=1):
-    for i in range(units+1):
+    for i in range(units):
       self.push(self.top())
   def rotr(self,units=1):
-    for i in range(units+1):
+    for i in range(units):
       self.prepend(self.pop())
   def fetch(self,pos):
     self.push(self.stack[pos])
@@ -79,3 +79,11 @@ def partitions(iterable):
       ret.append(sub)
   ret.append([iterable])
   return ret
+print(partitions('abcd'))
+stack=Stack()
+stack.push(1)
+stack.push(2)
+stack.push(3)
+stack.push(4)
+stack.rotr()
+print(str(stack))
