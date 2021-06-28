@@ -41,10 +41,10 @@ class Stack:
   def swap(self):
     self.stack[-2],self.stack[-1]=self.stack[-1],self.stack[-2]
   def rotl(self,units=1):
-    for i in range(units):
+    for i in range(units+1):
       self.push(self.top())
   def rotr(self,units=1):
-    for i in range(units):
+    for i in range(units+1):
       self.prepend(self.pop())
   def fetch(self,pos):
     self.push(self.stack[pos])
@@ -61,6 +61,16 @@ stack=Stack()
 variables=[]
 register=string.ascii_lowercase
 functions=[]
+def isnum(*args):
+  return all(type(arg) in [int,float,bool] for arg in args)
+def add(lhs,rhs):
+  types=[type(lhs),type(rhs)]
+  if types[0]==list:
+    return [add(x,rhs) for x in lhs]
+  if isnum(lhs,rhs):
+    return lhs+rhs
+  else:
+    return str(lhs)+str(rhs)
 def product(array):
   return functools.reduce(operator.__mul__,array)
 def transpose(array,filler=0):
@@ -79,11 +89,4 @@ def partitions(iterable):
       ret.append(sub)
   ret.append([iterable])
   return ret
-print(partitions('abcd'))
-stack=Stack()
-stack.push(1)
-stack.push(2)
-stack.push(3)
-stack.push(4)
-stack.rotr()
-print(str(stack))
+print(add([1,2,3,'string'],5))
