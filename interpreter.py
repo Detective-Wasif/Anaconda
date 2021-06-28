@@ -11,10 +11,10 @@ import itertools
 import collections
 import hashlib
 import operator
-#import turtle
+import turtle
 import numpy as np
 import sympy
-#from lexer import *
+from lexer import *
 from datetime import date
 from datetime import datetime as dt
 class Stack:
