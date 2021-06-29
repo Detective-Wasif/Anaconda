@@ -65,9 +65,13 @@ def isnum(*args):
   return all(type(arg) in [int,float,bool] for arg in args)
 def add(lhs,rhs):
   types=[type(lhs),type(rhs)]
-  if types[0]==list:
+  if types[0]==list and types[1]!=list:
     return [add(x,rhs) for x in lhs]
-  if isnum(lhs,rhs):
+  elif types==[list]*2:
+    return [add(x,y) for x,y in zip(lhs,rhs)]
+  elif types[0]!=list and types[1]==list:
+    return str(lhs).join(map(str,rhs))
+  elif isnum(lhs,rhs):
     return lhs+rhs
   else:
     return str(lhs)+str(rhs)
@@ -89,4 +93,4 @@ def partitions(iterable):
       ret.append(sub)
   ret.append([iterable])
   return ret
-print(add([1,2,3,'string'],5))
+print(add(4,6))
