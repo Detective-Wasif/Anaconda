@@ -1,2 +1,3 @@
 # Anaconda
-Anaconda golfing language, under rapid development
+
+Intended to turn out to be the Shinigami for other golflangs
