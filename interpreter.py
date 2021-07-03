@@ -20,14 +20,15 @@ from datetime import date
 from datetime import datetime as dt
 global commands
 commands={
-'+':('inter=add(lhs,rhs))','rhs=stack.pop();lhs=stack.pop();','stack.push(inter)'),
-' ':('pass'),
-"\n":('pass'),
-'w':('stack.wrap(stack.pop())'),
-'X':('stack.pair()'),
-'$':('stack.swap()'),
-':':('stack.dup()'),
-'_':('stack.pop()')
+'+':('inter=add(lhs,rhs)',2,'rhs=stack.pop();lhs=stack.pop()','stack.push(inter)'),
+'-':('inter=sub(lhs,rhs)',2,'rhs=stack.pop();lhs=stack.pop()','stack.push(inter)'),
+' ':('pass',0),
+"\n":('pass',0),
+'w':('stack.wrap(stack.pop())',0),
+'X':('stack.pair()',0),
+'$':('stack.swap()',0),
+':':('stack.dup()',0),
+'_':('stack.pop()',0)
 }
 class Stack:
   def __init__(self,prep=[]):
@@ -89,6 +90,10 @@ lazy=False
 frac=False
 def isnum(*args):
   return all(type(arg) in [int,float,bool] for arg in args)
+def ifbs(*args):
+  return all(type(arg) in [int,float,bool,str] for arg in args)
+def isit(*args):
+  return all(type(arg) in [str,list] for arg in args)
 def add(lhs,rhs):
   types=[type(lhs),type(rhs)]
   if types[0]==list and types[1]!=list:
@@ -101,6 +106,31 @@ def add(lhs,rhs):
     return lhs+rhs
   else:
     return str(lhs)+str(rhs)
+def sub(lhs,rhs):
+  types=[type(lhs),type(rhs)]
+  if types[0]==list and types[1]!=list:
+    return [sub(x,rhs) for x in lhs]
+  elif types==[list]*2:
+    return [sub(x,y) for x,y in zip(lhs,rhs)]
+  elif types[0]==str and ifbs(rhs):
+    return lhs.replace(str(rhs),'')
+  elif isnum(lhs) and isit(rhs):
+    temp=[*rhs]
+    del temp[lhs]
+    if types[1]==str:
+      return ''.join(temp)
+    else:
+      return temp
+  elif isnum(lhs,rhs): 
+    return lhs-rhs
+def mul(lhs,rhs):
+  types=[type(lhs),type(rhs)]
+  if types[0]==list and types[1]!=list:
+    return [mul(x,rhs) for x in lhs]
+  elif types==[list]*2:
+    return [mul(x,y) for x,y in zip(lhs,rhs)]
+  if ifbs(lhs) and isnum(rhs):
+    return lhs*rhs 
 def product(array):
   return reduce(operator.__mul__,array)
 def transpose(array,filler=0):
@@ -132,15 +162,15 @@ def compile(src,indent=0):
       if c=='if':
         compiled+=' '*indent+"if stack.peek():\n"
         indent+=2
-        compiled+=compile(args[0],indent)
+        compiled+=compile([Token(' ')]+args[0],indent)
         compiled+=' '*(indent-2)+"else:\n"
-        compiled+=compile(args[1],indent)
+        compiled+=compile([Token(' ')]+args[1],indent)
         indent-=2
         continue
       if c=='while':
         compiled+=' '*indent+"while stack.peek():\n"
         indent+=2
-        compiled+=compile(args[0],indent)
+        compiled+=compile([Token(' ')]+args[0],indent)
         indent-=2
         continue
       if c=='vectorise':
@@ -159,5 +189,14 @@ def compile(src,indent=0):
         compiled+=compile(args[0],indent)
         indent-=2
         continue
+    else:
+      if str(token) in commands:
+        io=commands[str(token)]
+        if io[1]:
+          for _ in [2,0,3]:
+            compiled+=' '*indent+io[_]+"\n"
+        else:
+          compiled+=' '*indent+io[0]+"\n"
   return compiled
 print(compile(data))
+#print(sub(2,[1,2,3]))
