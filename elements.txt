@@ -1,0 +1,17 @@
+Command     
+-------
++        a: number, b: number     Addition (a+b)         
+         a: number, b: string     Concatenate (a+b)
+         a: string, b: number
+         a: string, b: string
+         a: list,   b: any        Vectorise
+         a: list,   b: list       Zipped addition (a[0]+b[0],a[1]+b[1].....)
+         a: any,    b: list       Join b by a
+
+-        a: number, b: number     Subtraction (a-b)
+         a: string, b: string     Non-regex replace b from a with empty string (remove) (a-b)
+         a: string, b: number
+         a: number, b: list       Remove a'th element of b
+         a: number, b: string
+         a: list,   b: any        Vectorise
+         a: list,   b: any        Zipped subtraction (a[0]-b[0],a[1]-b[1]...)
