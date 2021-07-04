@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<title>Anaconda Interpreter</title>
+		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.0.2/js/bootstrap.min.js"></script>
+		<style type="text/css">
+			.bottom-row {
+				/*float: right;*/
+			}
+			#code {
+				margin-bottom: 25px;
+				margin-top: 15px;
+				margin-left: 25%;
+			}
+			#output {
+				/*margin-bottom: 0px;*/
+				margin-left: 50%;
+				width: 150%;
+			}
+			#input {
+				margin-top: 15px;
+				margin-left: 20%;
+			}
+			#run-button{
+				margin-left: 115%;
+			}
+			pre.scroll {
+				max-height: 20%;
+				overflow: auto;
+			}
+			#table-container {
+				overflow: auto;
+			}
+			.full {
+				width: 100%;
+			}
+			.Char {
+				width: 15%;
+			}
+			.Args {
+				width: 25%;
+			}
+			.Details {
+				width: 60%;
+				overflow: auto;
+			}
+
+			#code, #input, #output, #test-suite-input {
+				font-family: monospace;
+			}
+
+			#heading {
+				margin-left: 35%;
+			}
+
+            #test-suite {
+                display: none;
+            }
+
+            #switcher {
+                color: gray;
+            }
+
+            #middle-row {
+                padding-bottom: 10px;
+            }
+
+			#loading {
+				margin-left: 15px;
+				font-size: 24pt;
+				display: none;
+			}
+		</style>
+	</head>
+	<body>
+<form action="{{ url_for("gfg")}}" method="post">
+		<div class="container">
+			<h2 id="heading"><a href="https://github.com/Detective-Wasif/Anaconda/">Anaconda</a> Interpreter</h2><input type="submit" style="border:none;background-color:white;background: url('/static/run.ico');padding: 20px 30px;" value=""><button style="border:none;background-color:white"><svg style="width:50px;height:50px" viewBox="0 0 24 24">
+			<path fill="green" d="M10.59,13.41C11,13.8 11,14.44 10.59,14.83C10.2,15.22 9.56,15.22 9.17,14.83C7.22,12.88 7.22,9.71 9.17,7.76V7.76L12.71,4.22C14.66,2.27 17.83,2.27 19.78,4.22C21.73,6.17 21.73,9.34 19.78,11.29L18.29,12.78C18.3,11.96 18.17,11.14 17.89,10.36L18.36,9.88C19.54,8.71 19.54,6.81 18.36,5.64C17.19,4.46 15.29,4.46 14.12,5.64L10.59,9.17C9.41,10.34 9.41,12.24 10.59,13.41M13.41,9.17C13.8,8.78 14.44,8.78 14.83,9.17C16.78,11.12 16.78,14.29 14.83,16.24V16.24L11.29,19.78C9.34,21.73 6.17,21.73 4.22,19.78C2.27,17.83 2.27,14.66 4.22,12.71L5.71,11.22C5.7,12.04 5.83,12.86 6.11,13.65L5.64,14.12C4.46,15.29 4.46,17.19 5.64,18.36C6.81,19.54 8.71,19.54 9.88,18.36L13.41,14.83C14.59,13.66 14.59,11.76 13.41,10.59C13,10.2 13,9.56 13.41,9.17Z"></path></svg></button><button style="border:none;background-color:white"><svg style="width:50px;height:50px" viewBox="0 0 16 20">
+			<path d="m 4.5168423,2.1911896 h 4.9772756 v 1.965047 H 4.5086283 Z m 4.9858516,0 2.1334581,3.0884112 a 1.2823883,1.2823883 0 0 1 0.03328,1.4076459 L 8.9708507,11.014441 H 6.2192793 L 9.5021924,2.1911896 Z" fill="green"></path>
+			<path d="m 7.0054359,19.484617 a 3.9305221,3.9305221 0 1 0 0,-7.861044 3.9305221,3.9305221 0 1 0 0,7.861044 z m 0,-7.209582 a 3.2792804,3.2792804 0 1 0 0,6.558557 3.2792804,3.2792804 0 0 0 0,-6.558557 z m -2.5224635,3.279069 a 2.522885,2.522885 0 1 1 5.0453475,0 2.522885,2.522885 0 0 1 -5.0453475,0 z M 2.3747343,5.2796008 4.5086283,2.1911896 6.6160106,7.8546365 5.4332238,11.014441 H 5.0403894 L 2.3418243,6.6872467 a 1.2823883,1.2823883 0 0 1 0.032959,-1.4076459 z m 3.8445958,5.7348402 h 1.572213 L 7.0075693,8.9079154 Z" fill-rule="evenodd" fill="green"></path></svg></button>
+			<br>
+			<div class="row">
+				<div class="col-md-5">
+					<i class="fa fa-spinner fa-spin" id="loading" style="display: none;"></i>
+					<textarea name="code" id="code" placeholder="Code" class="form-control" rows="7">{{ code }}</textarea>
+
+					<textarea id="output" placeholder="Output" class="form-control" rows="7" disabled>{{ output }}</textarea>
+
+					<br>
+					<div class="bottom-row">
+						<!-- Debug on?: <input id="debug" type="checkbox"> -->
+					</div><br><br>
+
+					<br>
+					<p>Code length: <span id="length">0</span></p>
+				</div>
+				<div class="col-md-5">
+					<div id="inputs">
+				        <textarea name="input" id="input" placeholder="Input" class="form-control" rows="7" style="display: block;">{{ input }}</textarea>
+                        <div id="test-suite" style="display: none;">
+                            <textarea id="test-suite-input" placeholder="Test Cases" class="form-control" rows="7"></textarea>
+                        </div>
+                    </div>
+				</div>
+</form>
+
+
+</body>
+</html>
