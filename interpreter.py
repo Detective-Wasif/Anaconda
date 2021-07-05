@@ -22,6 +22,7 @@ global commands
 commands={
 '+':('inter=add(lhs,rhs)',2,'rhs=stack.pop();lhs=stack.pop()','stack.push(inter)'),
 '-':('inter=sub(lhs,rhs)',2,'rhs=stack.pop();lhs=stack.pop()','stack.push(inter)'),
+',':(r'stdout[0]+=str(stack.peek())+"\n";stack.pop()',1,'pass','pass'),
 ' ':('pass',0),
 "\n":('pass',0),
 'w':('stack.wrap(stack.pop())',0),
@@ -88,6 +89,7 @@ register=string.ascii_lowercase
 functions=[]
 lazy=False
 frac=False
+stdout=''
 def isnum(*args):
   return all(type(arg) in [int,float,bool] for arg in args)
 def ifbs(*args):
@@ -149,8 +151,6 @@ def partitions(iterable):
       ret.append(sub)
   ret.append([iterable])
   return ret
-data=open(sys.argv[1]).read()
-data=lexer(data)
 def compile(src,indent=0):
   compiled=''
   for token in src:
@@ -198,5 +198,18 @@ def compile(src,indent=0):
         else:
           compiled+=' '*indent+io[0]+"\n"
   return compiled
-print(compile(data))
-#print(sub(2,[1,2,3]))
+#print(compile(data))
+def execute_file(f,stdout,stdin):
+  data=open(f).read()
+  data=lexer(data)
+  for x in stdin:
+    stack.push(x)
+  exec(compile(data))
+  return stdout
+def execute(Code,stdout,stdin):
+  for x in stdin:
+    stack.push(x)
+  exec(compile(lexer(Code)))
+  return stdout
+if __name__=='__main__':
+  print(execute_file(sys.argv[1],[''],[]))
