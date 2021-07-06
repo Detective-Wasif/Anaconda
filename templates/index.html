@@ -78,6 +78,12 @@
 		</style>
 	</head>
 	<body>
+<script>
+    function lengt(){
+        code = document.getElementById('code').value
+        return code.length + " bytes, " + code.length + " chars, (SBCS)"
+    }
+</script>
 <form action="{{ url_for("gfg")}}" method="post">
 		<div class="container">
 			<h2 id="heading"><a href="https://github.com/Detective-Wasif/Anaconda/">Anaconda</a> Interpreter</h2><input type="submit" style="border:none;background-color:white;background: url('/static/run.ico');padding: 20px 30px;" value=""><button style="border:none;background-color:white"><svg style="width:50px;height:50px" viewBox="0 0 24 24">
@@ -88,7 +94,7 @@
 			<div class="row">
 				<div class="col-md-5">
 					<i class="fa fa-spinner fa-spin" id="loading" style="display: none;"></i>
-					<textarea name="code" id="code" placeholder="Code" class="form-control" rows="7">{{ code }}</textarea>
+					<textarea name="code" id="code" placeholder="Code" class="form-control" rows="7" onkeydown="document.getElementById('len').innerHTML=lengt()" onpaste="document.getElementById('len').innerHTML=lengt()" oninput="document.getElementById('len').innerHTML=lengt()">{{ code }}</textarea>
 
 					<textarea id="output" placeholder="Output" class="form-control" rows="7" disabled>{{ output }}</textarea>
 
@@ -98,7 +104,7 @@
 					</div><br><br>
 
 					<br>
-					<p>Code length: <span id="length">0</span></p>
+					<span id="len" name="len">{{ leng }}</span>
 				</div>
 				<div class="col-md-5">
 					<div id="inputs">
