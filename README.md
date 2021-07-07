@@ -2,7 +2,9 @@
 
 Intended to turn out to be the Shinigami for other golflangs
 
-Heavy work in progress
+My main goal is to beat all other golfing languages, plus I refuse to call Anaconda an esolang, Because I intend to put many features in it besides golfing.
+
+**Heavy WIP**
 
 Online interpreter is designed. To run that locally:
 
