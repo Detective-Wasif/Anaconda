@@ -22,6 +22,7 @@ global commands
 commands={
 '+':('inter=add(lhs,rhs)',2,'rhs=stack.pop();lhs=stack.pop()','stack.push(inter)'),
 '-':('inter=sub(lhs,rhs)',2,'rhs=stack.pop();lhs=stack.pop()','stack.push(inter)'),
+'×':('inter=mul(lhs,rhs)',2,'rhs=stack.pop();lhs=stack.pop()','stack.push(inter)'),
 ',':(r'stdout[0]+=str(stack.peek())+"\n";stack.pop()',1,'pass','pass'),
 ' ':('pass',0),
 "\n":('pass',0),
@@ -132,7 +133,25 @@ def mul(lhs,rhs):
   elif types==[list]*2:
     return [mul(x,y) for x,y in zip(lhs,rhs)]
   if ifbs(lhs) and isnum(rhs):
-    return lhs*rhs 
+    return lhs*rhs
+  if types==[str]*2:
+    return [lhs+c for c in rhs]
+  if isnum(lhs) and types[1]==str:
+    return rhs*lhs
+  if types[0]!=list and types[1]==list:
+    return [mul(lhs,x) for x in rhs]
+def div(lhs,rhs):
+  types=[type(lhs),type(rhs)]
+  if types[0]==list and types[1]!=list:
+    return [div(x,rhs) for x in lhs]
+  elif types==[list]*2:
+    return [div(x,y) for x,y in zip(lhs,rhs)]
+  if isnum(lhs,rhs):
+    return lhs/rhs
+  if types[0]==str and isnum(rhs):
+    return [lhs[x:x+rhs] for x in range(0,len(s),rhs+1)]
+  if types[0]!=list and types[1]==list:
+    return [div(lhs,x) for x in rhs]
 def product(array):
   return reduce(operator.__mul__,array)
 def transpose(array,filler=0):
@@ -210,6 +229,6 @@ def execute(Code,stdout,stdin):
   for x in stdin:
     stack.push(x)
   exec(compile(lexer(Code)))
-  return stdout
+  return stdout,compile(lexer(Code))
 if __name__=='__main__':
   print(execute_file(sys.argv[1],[''],[]))
