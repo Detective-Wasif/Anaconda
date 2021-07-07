@@ -14,4 +14,15 @@ Command
          a: number, b: list       Remove a'th element of b
          a: number, b: string
          a: list,   b: any        Vectorise
-         a: list,   b: any        Zipped subtraction (a[0]-b[0],a[1]-b[1]...)
+         a: list,   b: list       Zipped subtraction (a[0]-b[0],a[1]-b[1].....)
+
+×        a: number, b: number     Multiplication
+         a: string, b: number     Times (a repeated b times)
+         a: number, b: string     Times (b repeated a times)
+         a: string, b: string     Append each character in b to a (make a list)
+         a: any,    b: list       Vectorise 
+         a: list,   b: any        
+         a: list,   b: list       Zipped multiplication (a[0]×b[0],a[1]×b[1].....)
+
+
+
