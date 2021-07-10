@@ -249,8 +249,10 @@ def execute(Code,stdout,stdin,flags):
   for x in stdin:
     stack.push(x)
   stack.addflag(flags)
-  print(stack.getflags())
+  start=time.time()
   exec(compile(lexer(Code)))
-  return stdout,compile(lexer(Code))
+  end=time.time()
+  elapsed=str(end-start)+" seconds"
+  return stdout,compile(lexer(Code)),elapsed
 if __name__=='__main__':
   print(execute_file(sys.argv[1],[''],[],[]))
