@@ -1,11 +1,24 @@
-s='1[2|`yu`[4|5]]4(`repro me`)viƛ`full-blown map`12(see);λ(`variadic`{`arity`(`function`)})ƛ`it works now!!!`;;'
-
+s='100(⍵15%0=[`FizzBuzz`|⍵5%0=[`Fizz`|⍵3%0=[`Buzz`|⍵;;;d; xx'
+import re
 # My poor man's parser for Anaconda written in pure Python (But it gets the job done)
 class Token:
   def __init__(self,Type):
     self.command=Type
   def __repr__(self):
     return self.command
+def transform(s):
+  k=s
+  d=re.sub('[^[{(ƛλ]','',s)[::-1]
+  close={'{':'}','(':')','ƛ':';','[':']','λ':';'}
+  for _ in range(10):
+    for x,y in enumerate(d):
+      i=s.replace(';','X',x).find(';')
+      l=[*s]
+      l[i]=close[y]
+      s=''.join(l)
+  if s[-1]==']':
+    s+=k[-1]
+  return s
 def lexer(s):
   lex=[]
   s=s.replace('\`','ƙ')
@@ -138,6 +151,4 @@ def lexer(s):
   return lex
 
 
-print(lexer(s))
-for command in lexer(s):
-  print(command)
+#print(lexer(transform(s)))
