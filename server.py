@@ -25,7 +25,7 @@ def gfg():
       fine+="\n"
       fine+="=====================================\n"
       fine+=transpiled
-    return render_template('index.html',output=fine,code=script,leng=leng,input=send,trans=transpiled)        
+    return render_template('index.html',output=fine,code=script,leng=leng,input=send,trans=transpiled,elapsed=data[2])        
   return render_template("index.html")
 if __name__=='__main__':
    app.run(port=7777,debug=True)
