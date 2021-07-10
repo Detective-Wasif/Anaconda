@@ -1,5 +1,5 @@
 # This is an internal module which contains abstract data structures used only by the interpreter itself
-# Document, Stack
+# Document, Stack (WIP)
 
 class Document:
   def __init__(self,x=0,y=0,wfill='-',hfill='|',corner='+',fill=' '):
