@@ -35,6 +35,7 @@ commands={
 class Stack:
   def __init__(self,prep=[]):
     self.stack=prep
+    self.flags=[]
   def push(self,val):
     self.stack.append(val)
   def pop(self):
@@ -84,6 +85,13 @@ class Stack:
   def __str__(self):
    self.join(', ')
    return self.pop()
+  def addflag(self,flag):
+    self.flags.extend(flag)
+  def getflags(self):
+    return self.flags
+  def clear(self):
+    self.stack=[]
+    self.flags=[]
 stack=Stack()
 variables=[]
 register=string.ascii_lowercase
@@ -104,7 +112,10 @@ def add(lhs,rhs):
   elif types==[list]*2:
     return [add(x,y) for x,y in zip(lhs,rhs)]
   elif types[0]!=list and types[1]==list:
-    return str(lhs).join(map(str,rhs))
+    if 'S' in stack.getflags():
+      return str(lhs).join(map(str,rhs))
+    else:
+      return [add(lhs,x) for x in rhs]
   elif isnum(lhs,rhs):
     return lhs+rhs
   else:
@@ -118,12 +129,15 @@ def sub(lhs,rhs):
   elif types[0]==str and ifbs(rhs):
     return lhs.replace(str(rhs),'')
   elif isnum(lhs) and isit(rhs):
-    temp=[*rhs]
-    del temp[lhs]
-    if types[1]==str:
-      return ''.join(temp)
+    if 'S' in stack.getflags():
+      temp=[*rhs]
+      del temp[lhs]
+      if types[1]==str:
+        return ''.join(temp)
+      else:
+        return temp
     else:
-      return temp
+      return [sub(lhs,x) for x in rhs]
   elif isnum(lhs,rhs): 
     return lhs-rhs
 def mul(lhs,rhs):
@@ -171,7 +185,7 @@ def partitions(iterable):
   ret.append([iterable])
   return ret
 def compile(src,indent=0):
-  compiled=''
+  compiled=""
   for token in src:
     if type(token) in [int,float,str]:
       compiled+=' '*indent+'stack.push('+repr(token)+")\n"
@@ -216,19 +230,27 @@ def compile(src,indent=0):
             compiled+=' '*indent+io[_]+"\n"
         else:
           compiled+=' '*indent+io[0]+"\n"
+  compiled+="if 'j' in stack.getflags():\n"
+  compiled+="  stdout+=str(stack)\n"
+  compiled+="else:\n"
+  compiled+="  stdout+=str(stack.peek())\n"
+  compiled+="stack.clear()\n"
   return compiled
 #print(compile(data))
-def execute_file(f,stdout,stdin):
+def execute_file(f,stdout,stdin,flags):
   data=open(f).read()
   data=lexer(data)
   for x in stdin:
     stack.push(x)
+  print(flags)
   exec(compile(data))
   return stdout
-def execute(Code,stdout,stdin):
+def execute(Code,stdout,stdin,flags):
   for x in stdin:
     stack.push(x)
+  stack.addflag(flags)
+  print(stack.getflags())
   exec(compile(lexer(Code)))
   return stdout,compile(lexer(Code))
 if __name__=='__main__':
-  print(execute_file(sys.argv[1],[''],[]))
+  print(execute_file(sys.argv[1],[''],[],[]))
