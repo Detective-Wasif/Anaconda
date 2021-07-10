@@ -230,11 +230,6 @@ def compile(src,indent=0):
             compiled+=' '*indent+io[_]+"\n"
         else:
           compiled+=' '*indent+io[0]+"\n"
-  compiled+="if 'j' in stack.getflags():\n"
-  compiled+="  stdout+=str(stack)\n"
-  compiled+="else:\n"
-  compiled+="  stdout+=str(stack.peek())\n"
-  compiled+="stack.clear()\n"
   return compiled
 #print(compile(data))
 def execute_file(f,stdout,stdin,flags):
@@ -249,8 +244,14 @@ def execute(Code,stdout,stdin,flags):
   for x in stdin:
     stack.push(x)
   stack.addflag(flags)
+  compiled=compile(lexer(Code))
+  compiled+="if 'j' in stack.getflags():\n"
+  compiled+="  stdout+=str(stack)\n"
+  compiled+="else:\n"
+  compiled+="  stdout+=str(stack.peek())\n"
+  compiled+="stack.clear()\n"
   start=time.time()
-  exec(compile(lexer(Code)))
+  exec(compiled)
   end=time.time()
   elapsed=str(end-start)+" seconds"
   return stdout,compile(lexer(Code)),elapsed
